@@ -17,10 +17,8 @@ import frc.robot.Constants;
 public class SwerveWire extends SubsystemBase{
 
     private final AHRS gyro = new AHRS(SerialPort.Port.kMXP);
-    public static double fieldCal = 0;
 
     public SwerveWire() {
-        // gyro.reset();
     }
 
     private MK3Module[] modules = new MK3Module[] {
@@ -72,11 +70,11 @@ public class SwerveWire extends SubsystemBase{
 	public void drive(double driveSpeed, double strafeSpeed, double rotationSpeed, boolean fieldRelative, boolean calGyro) {
         
         if(calGyro) {
-            fieldCal = -gyro.getAngle(); 
+            gyro.reset(); 
         }
         
         SwerveModuleState[] states = kinematics.toSwerveModuleStates(
-            fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(driveSpeed, strafeSpeed, rotationSpeed, Rotation2d.fromDegrees((-gyro.getAngle() + fieldCal)))
+            fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(driveSpeed, strafeSpeed, rotationSpeed, Rotation2d.fromDegrees(-gyro.getAngle()))
                           : new ChassisSpeeds(driveSpeed, strafeSpeed, rotationSpeed)
         );
 
@@ -85,7 +83,8 @@ public class SwerveWire extends SubsystemBase{
         for(int i = 0; i < states.length; i++) {
             MK3Module module = modules[i];
             SwerveModuleState state = states[i];
-            SmartDashboard.putNumber(String.valueOf(i), module.getAngle());
+            SmartDashboard.putNumber(String.valueOf(i), module.getRawAngle());
+            SmartDashboard.putNumber("Gyro Angle: ", gyro.getAngle());
             // System.out.println("Module Angle: " + module.getAngle());
             module.setDesiredState(state);
         }

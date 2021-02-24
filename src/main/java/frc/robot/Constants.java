@@ -1,7 +1,5 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.util.Units;
-
 public class Constants {
     
     /* Operator Interaction */
@@ -37,7 +35,7 @@ public class Constants {
 
     /* Encoder Information */
     public static final int ENCODER_CPR = 4096;
-    public static final double TURN_ENCODER_DIST_PER_PULSE = (2 * Math.PI) / (double) ENCODER_CPR;
+    public static final double TURN_ENCODER_DIST_PER_PULSE = 360 / (double) ENCODER_CPR;
     public static final boolean MODULE_1_DRIVE_REVERSED = false;
     public static final boolean MODULE_1_TURN_REVERSED = false;
     public static final boolean MODULE_2_DRIVE_REVERSED = false;
